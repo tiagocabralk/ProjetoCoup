@@ -1,61 +1,49 @@
 package entidades;
 
+import java.util.Arrays;
+import java.util.Random;
 import java.util.Scanner;
 
 public class Jogador {
     Scanner in = new Scanner(System.in);
+    Random sorteio = new Random();
     // Atributos
     private String nome;
-    private String influencia1;
-    private String influencia2;
+    private Carta carta;
+    private Carta influencia2;
     private boolean permitir;
     private int saldo;
     private int vida;
     // Construtores
-    public Jogador(String nome, String influencia1, String influencia2, int vida, int saldo) {
-        this.nome = nome;
-        this.influencia1 = influencia1;
-        this.influencia2 = influencia2;
-        this.vida = 2;
-        this.saldo = 2;
-    }
 
-    public Jogador(String nome, String influencia1, String influencia2) {
+    public Jogador(String nome, Carta carta, int saldo) {
         this.nome = nome;
-        this.influencia1 = influencia1;
-        this.influencia2 = influencia2;
+        this.carta = carta;
+        this.saldo = saldo;
     }
-
     // Métodos Especiais
     public String getNome() {
         return nome;
     }
+
     public void setNome(String nome) {
         this.nome = nome;
     }
-    public String getInfluencia1() {
-        return influencia1;
+
+    public Carta getCarta() {
+        return carta;
     }
-    public void setInfluencia1(String influencia1) {
-        this.influencia1 = influencia1;
+
+    public void setCarta(Carta carta) {
+        this.carta = carta;
     }
-    public String getInfluencia2() {
+
+    public Carta getInfluencia2() {
         return influencia2;
     }
-    public void setInfluencia2(String influencia2) {
+
+    public void setInfluencia2(Carta influencia2) {
         this.influencia2 = influencia2;
-    }
-    public int getSaldo() {
-        return saldo;
-    }
-    public void setSaldo(int saldo) {
-        this.saldo = saldo;
-    }
-    public int getVida() {
-        return vida;
-    }
-    public void setVida(int vida) {
-        this.vida = vida;
     }
 
     public boolean isPermitir() {
@@ -66,6 +54,21 @@ public class Jogador {
         this.permitir = permitir;
     }
 
+    public int getSaldo() {
+        return saldo;
+    }
+
+    public void setSaldo(int saldo) {
+        this.saldo = saldo;
+    }
+
+    public int getVida() {
+        return vida;
+    }
+
+    public void setVida(int vida) {
+        this.vida = vida;
+    }
     // Métodos Públicos
     public void renda() {
         this.setSaldo(this.getSaldo() + 1);
@@ -85,14 +88,14 @@ public class Jogador {
             System.out.println(this.getNome() + " foi bloqueado por " + jogador + " com o Duque!");
         }
     }
-    public void golpeEstado(Jogador jogador, String golpe) {
-        if (jogador.getInfluencia1().equals(golpe) || jogador.getInfluencia2().equals(golpe)) {
+    public void golpeEstado(Jogador jogador, Carta carta) {
+        if (jogador.getCarta().equals(carta)) {
             jogador.setVida(jogador.getVida() - 1);
             this.setSaldo(this.getSaldo() - 7);
-            System.out.println(this.getNome() + " deu um golpe de estado na carta " + golpe + " de " + jogador.getNome() + "!");
+            System.out.println(this.getNome() + " deu um golpe de estado na carta " + carta + " de " + jogador.getNome() + "!");
         } else {
             this.setSaldo(this.getSaldo() - 7);
-            System.out.println(this.getNome() + " falhou em um golpe de estado na carta " + golpe + " de " + jogador.getNome() + "!");
+            System.out.println(this.getNome() + " falhou em um golpe de estado na carta " + carta + " de " + jogador.getNome() + "!");
         }
     }
     public void taxar() {
@@ -112,27 +115,21 @@ public class Jogador {
         this.setSaldo(this.getSaldo() + 2);
         System.out.println(this.getNome() + " roubou 2 moedas de " + jogador.getNome() + "!");
     }
-    public void trocar(String a, String b){
-        if(this.getVida() == 2) {
-            this.setInfluencia1("Embaixador");
-            this.setInfluencia2("Assassino");
-            System.out.println(this.getNome() + " trocou as cartas com sucesso!");
-        } else {
-            this.setInfluencia1("Capitão");
-            System.out.println(this.getNome() + " trocou a carta com sucesso!");
-        }
+    public void trocarUma(Carta carta){
+        int sorteia = sorteio.nextInt(15);
+    }
+    public void trocarDuas(Carta carta1, Carta carta2){
+
     }
     public void permitir() {
         this.setPermitir(true);
     }
-    public void status() {
-        System.out.println(
-                "nome='" + this.getNome() + '\'' +
-                ", influencia1='" + this.getInfluencia1() + '\'' +
-                ", influencia2='" + this.getInfluencia2() + '\'' +
-                ", saldo=" + this.getSaldo() +
-                ", vida=" + this.getVida() +
-                '}');
+
+    @Override
+    public String toString() {
+        return "Nome: " + this.getNome() +
+                " | Carta: " + this.getCarta() +
+                " | Saldo: " + this.getSaldo();
     }
 
 }

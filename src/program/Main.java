@@ -2,63 +2,80 @@ package program;
 
 import entidades.*;
 
+import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
+        Random sorteio = new Random();
 
-        System.out.println("-----------------------------");
-        System.out.println("            COUP             ");
-        System.out.println("-----------------------------");
-        System.out.print("Quantidade de Jogadores: ");
-        int qtdJogadores = in.nextInt(); in.nextLine(); // Esse segundo in.nextLine() serve para receber a quebra de linha extra que o nextInt() deixa.
+        System.out.println("---------------------------------------");
+        System.out.println("         COUP BY TIAGO CABRAL          ");
+        System.out.println("---------------------------------------");
+        System.out.println("Escolha o modo de jogo: ");
+        System.out.println("---");
+        System.out.println("[1] Clássico");
+        System.out.println("[2] Expansão");
+        System.out.println("---");
+        System.out.print("Resposta: ");
+        int option = in.nextInt();
 
-        Jogador[] jogador = new Jogador[qtdJogadores];
-        String nome, vida1, vida2;
+        System.out.println();
 
-        for (int i=0; i<jogador.length; i++) {
-            System.out.println();
-            System.out.print("Nome: ");
-            nome = in.nextLine();
-            System.out.print("Influência 01: ");
-            vida1 = in.nextLine();
-            System.out.print("Influência 02: ");
-            vida2 = in.nextLine();
-            jogador[i] = new Jogador(nome, vida1, vida2, 2,2);
+        /* Instanciando as cartas para serem distribuídas aos jogadores */
+        Carta duque = new Carta("Duque");
+        Carta condessa = new Carta("Condessa");
+        Carta assassino = new Carta("Assassino");
+        Carta embaixador = new Carta("Embaixador");
+        Carta capitao = new Carta("Capitão");
+        Carta inquisitor = new Carta("Inquisitor");
+
+        /* Preparando um array para fazer o sorteio relacionando o número sorteado com os índices deste array */
+        Carta[] carta = new Carta[15];
+
+        if (option == 1) {
+            // Esse modo não contém a carta inquisitor
+            carta = new Carta[]{duque, condessa, assassino, embaixador, capitao, duque, condessa, assassino, embaixador, capitao, duque, condessa, assassino, embaixador, capitao};
+        } else if (option == 2) {
+            // Esse modo contém a carta inquisitor
+            carta = new Carta[]{duque, condessa, assassino, inquisitor, capitao, duque, condessa, assassino, inquisitor, capitao, duque, condessa, assassino, inquisitor, capitao};
         }
 
-        jogador[0].ajudaExterna(jogador[1]);
+        /* Configuração de jogo */
+        System.out.print("Nº de Jogadores: ");
+        int numJogadores = in.nextInt();
+        in.nextLine(); // Esse "in.nextLine()" serve para receber a quebra de linha que sobrou do in.nextInt() anterior
+        System.out.println("---");
 
-//        jogador[0].status();
-//        jogador[1].status();
-//        jogador[0].taxar();
-//        jogador[1].taxar();
-//        jogador[0].status();
-//        jogador[1].status();
-//        jogador[0].assassinar(jogador[1]);
-//        jogador[0].status();
-//        jogador[1].status();
-//        jogador[1].extorquir(jogador[0]);
-//        jogador[0].status();
-//        jogador[1].status();
-//        jogador[1].golpeEstado(jogador[0], "Assassino");
+        System.out.println();
 
-        /*
-        Carta
-            Tipo
-                Duque
-                Condessa
-                Assassino
-                Capitão
-                Embaixador
-		*/
+        Jogador[] jogadores = new Jogador[numJogadores]; // Definindo o tamanho do array conforme escolha do usuário
 
-        /*
-        for (int i=0; i<3; i++){
-            int randomNum = (int)(Math.random() * 15);  // 0 to 100
-            tiago.setInfluencia(classico[randomNum]);
-        }*/
+        /* Preenchimento dos indices do array */
+        for (int i=0; i<jogadores.length; i++) {
+            System.out.print("Nome: ");
+            String nome = in.nextLine();
+
+            int sorteia = sorteio.nextInt(15); // Primeiro número randômico sendo sorteado
+            Carta cartas = carta[sorteia];
+
+            int saldo = 7;
+
+            jogadores[i] = new Jogador(nome, cartas, saldo);
+        }
+
+        System.out.println();
+
+        for (Jogador j : jogadores) {
+            System.out.println(j.toString());
+        }
+
+        jogadores[3].ajudaExterna(jogadores[2]);
+
+        jogadores[0].golpeEstado(jogadores[4], carta[11]);
+
+        System.out.println(jogadores[0]);
 
     }
 }
